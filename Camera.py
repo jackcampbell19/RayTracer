@@ -1,8 +1,6 @@
-import numpy as np
-
-from Ray import Ray
-from Vector import Vector
-from Rotate import rotate_vector_z, rotate_vector_y, rotate_vector_x
+from utils.Ray import Ray
+from utils.Vector import Vector
+from utils.Rotate import rotate_vector_z, rotate_vector_y, rotate_vector_x
 
 
 class Camera:

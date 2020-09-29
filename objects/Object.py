@@ -1,7 +1,7 @@
-from Vector import Vector
-from Ray import Ray
+from AngularLighting import AngularLighting
+from utils.Vector import Vector
 import numpy as np
-from Color import Color
+from utils.Color import Color
 import math
 
 
@@ -24,7 +24,7 @@ class Object:
     # Determines if a "triangle" is intersected by a ray. Returns the point
     # at which the intersection happens and the angle of intersection, or None if there is not any.
     @staticmethod
-    def triangle_has_intersection(triangle, ray):
+    def get_triangle_intersection(triangle, ray):
         # Moller-Trumbore
         [p1, p2, p3] = triangle
         e1 = p2 - p1
@@ -51,27 +51,34 @@ class Object:
         # Return the intersection point and angle of intersection
         return [intersection_point, angle]
 
-    # Generic intersect algorithm. Iterates over triangles in object and returns the color
-    # if there was an intersection and None if there is not.
-    def intersect(self, ray):
-        intersections = []
+    # Generic intersect algorithm. Iterates over triangles in object and returns the closest triangles index,
+    # the intersection point, and the angle of intersection or None if there is no intersection.
+    def get_closest_intersection(self, ray):
+        # Setup variable to track distance
+        shortest_distance = math.inf
+        intersection = None
+        index = 0
         # Iterate over all triangles
-        for triangle in self.triangles:
+        for i in range(len(self.triangles)):
+            triangle = self.triangles[i]
             # Check for intersection
-            intersect = self.triangle_has_intersection(triangle, ray)
-            if intersect:
-                intersections.append(intersect)
-        # Get the color
-        if len(intersections) > 0:
-            # Get the closest intersection to the rays origin, i.e. the first item intersected
-            [point, angle] = min(intersections, key=lambda x: np.linalg.norm(x[0] - ray.origin))
-            # If the angle of intersection is negative, return None, i.e. if the normal
-            # of the face is pointed away from the ray
-            if angle < 0:
-                return None
-            deg_factor = abs(angle) / 90
-            amp = lambda x: -(x - 1) ** 2 + 1
-            deg_factor = amp(deg_factor)
-            angle_color = int(255 * deg_factor)
-            return Color(angle_color, angle_color, angle_color)
+            intersect = self.get_triangle_intersection(triangle, ray)
+            # If the intersection exists and it is closer to ray origin
+            if intersect and np.linalg.norm(intersect[0] - ray.origin) < shortest_distance:
+                shortest_distance = np.linalg.norm(intersect[0] - ray.origin)
+                intersection = intersect
+                index = i
+        # Return if the intersection exists and the angle is positive. If the angle is negative, the normal is facing
+        # away from the ray
+        if intersection and intersection[1] >= 0:
+            return [index] + intersection
         return None
+
+    # Returns color from intersection or None if there is no intersection. Default lighting model is
+    def intersect(self, ray):
+        intersection = self.get_closest_intersection(ray)
+        if not intersection:
+            return None
+        [index, point, angle] = intersection
+        intensity = AngularLighting.light_intensity_from_angle(angle)
+        return

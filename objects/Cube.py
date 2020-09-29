@@ -1,7 +1,5 @@
 from objects.Object import Object
-from Vector import Vector
-from Color import Color
-import numpy as np
+from utils.Vector import Vector
 
 
 class Cube(Object):

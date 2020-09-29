@@ -8,7 +8,7 @@ class Triangle(Object):
         self.color = color
 
     def intersect(self, ray):
-        intersect = self.triangle_has_intersection(self.points, ray)
+        intersect = self.get_triangle_intersection(self.points, ray)
         if not intersect:
             return None
         return self.color
