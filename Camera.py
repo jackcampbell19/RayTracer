@@ -1,4 +1,6 @@
 import numpy as np
+
+from Ray import Ray
 from Vector import Vector
 from Rotate import rotate_vector_z, rotate_vector_y, rotate_vector_x
 
@@ -55,9 +57,18 @@ class Camera:
 
     def setPosition(self, vec):
         self.position = vec
+        self.frame = self.construct_frame()
 
     def setRotation(self, rot):
         self.rotation = rot
+        self.frame = self.construct_frame()
 
-    # Generates a ray given a position on the frame
-    def generate_ray(self, x, y):
+    # Generates a ray given a position on the frame, px and py are between 0 and 1
+    def generate_ray(self, px, py):
+        # Calculate point on frame to trace ray through
+        tx0 = self.frame[0] * px + self.frame[1] * (1.0 - px)
+        tx1 = self.frame[2] * px + self.frame[3] * (1.0 - px)
+        fp = tx0 * py + tx1 * (1.0 - py)
+        # Calculate ray
+        direction = fp - self.position
+        return Ray(self.position, direction)
