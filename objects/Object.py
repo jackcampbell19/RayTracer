@@ -81,4 +81,5 @@ class Object:
             return None
         [index, point, angle] = intersection
         intensity = AngularLighting.light_intensity_from_angle(angle)
-        return
+        angle_color = int(255 * intensity)
+        return Color(angle_color, angle_color, angle_color)
