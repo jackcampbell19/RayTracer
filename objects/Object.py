@@ -3,6 +3,7 @@ from utils.Vector import Vector
 import numpy as np
 from utils.Color import Color
 import math
+from utils.Ray import Ray
 
 
 # Generic object class. Consists of an array of "triangles" (each triangle is a list of 3 vectors) and

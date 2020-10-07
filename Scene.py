@@ -23,7 +23,7 @@ class Scene:
     # Render the scene in perspective view
     def render_perspective(self):
         # Get the thread count
-        thread_count = mp.cpu_count()
+        thread_count = 1#mp.cpu_count()
         # Determine how many rows to assign to each thread
         thread_split = int(math.floor(self.camera.height * self.resolution / thread_count))
         # Determine the leftover rows that need to be processed after
@@ -56,6 +56,7 @@ class Scene:
                 py = (y + y_start) / height
                 # Calculate ray
                 ray = self.camera.generate_ray(px, py)
+                # print(ray)
                 for obj in self.objects:
                     # Get color from intersection
                     clr = obj.intersect(ray)
