@@ -9,6 +9,7 @@
 #include "Color.h"
 #include "Object.h"
 #include <time.h>
+#include "Light.h"
 
 int main(void) {
 
@@ -24,7 +25,7 @@ int main(void) {
   // Add triangle
   Triangle* t0 = (Triangle*) malloc(sizeof(Triangle));
   Vector v0 = {0, 0, 0};
-  Vector v1 = {10, 0, 0};
+  Vector v1 = {20, -5, 0};
   Vector v2 = {4, 0, 10};
   triangle_construct(t0, &v0, &v1, &v2);
   Color color = {0, 255, 0};
@@ -33,21 +34,28 @@ int main(void) {
   tri->visible = 1;
 
   // Add cube
-  Vector c_origin = {0, 0, 0};
+  Vector c_origin = {10, 0, -3};
   Color c_color = {120, 0, 255};
   Object* cube = object_create_cube(&c_origin, 15, 12, 10, &c_color);
-  cube->visible = 0;
+  cube->visible = 1;
   scene_add_object(scene, cube);
+
+
+  // Add light
+  Vector l_origin = {-5, -2, 10};
+  Color l_color = {255, 255, 255};
+  Light* light = light_create(&l_origin, 20, 1, &l_color);
+  scene_add_light(scene, light);
 
 
   time_t start = time(NULL);
 
-  int asize = scene_get_pix_rgb_size(scene);
-  int* pix_rgb = (int*) malloc(sizeof(int) * asize);
+
+  int* pix_rgb = scene_create_pix_rgb(scene);
   scene_render_perspective(scene, pix_rgb);
 
   char* filepath = "myfile.txt";
-  image_write_pix_rgb_to_file(pix_rgb, asize, filepath);
+  image_write_pix_rgb_to_file(pix_rgb, scene_get_pix_rgb_size(scene), filepath);
 
   time_t end = time(NULL);
 
