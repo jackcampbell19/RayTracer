@@ -18,7 +18,7 @@ int main(void) {
   Render* render = (Render*) malloc(sizeof(Render));
   render_construct(render);
   // Adjust the resolution
-  scene_set_resolution(render->scene, 10);
+  scene_set_resolution(render->scene, 3);
   // Adjust camera
   camera_set_size(render->scene->camera, 100, 100);
   // Vector camera_origin = {7, 6, 4};

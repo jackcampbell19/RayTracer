@@ -127,13 +127,13 @@ void scene_add_light(Scene* s, Light* l) {
 double scene_get_light_intensity(Scene* s, Vector* intersection, double angle) {
     // return -pow((fabs(angle) / 90) - 1, 2) + 1;
 
-    double ambient = (-pow((fabs(angle) / 90) - 1, 2) + 1) * 0.25;
+    double ambient = (-pow((fabs(angle) / 90) - 1, 2) + 1);
 
     ArrayNode* current = s->light_first_node;
     Vector i;
     double a;
     Color c;
-    double output = 0 + ambient;
+    double output = 0;
     while (1) {
         if (!current->is_head) {
             // Get the light from the node
@@ -146,7 +146,7 @@ double scene_get_light_intensity(Scene* s, Vector* intersection, double angle) {
             ray_construct(&ray, &origin, &direction);
             Vector ltp;
             if (!scene_get_closest_object_intersection(s, &ray, &i, &a, &c, &ltp)) {
-                output += light_get_distance_intensity(light, intersection);
+                output += light_get_distance_intensity(light, intersection) * ambient;
             }
         }
         if (!current->has_next) {

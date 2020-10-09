@@ -30,4 +30,4 @@ for f in range(frames):
     l = np.array(list(map(lambda x: int(x), contents[0].split(',')[:-1])))
 
     # show_image(l, width, height)
-    save_image(l, width, height, 'output/images/frame-' + str(f) + ".jpg")
+    save_image(l, width, height, 'output/images/frame-' + str(f) + ".png")
