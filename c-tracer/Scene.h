@@ -25,7 +25,9 @@ void scene_add_light(Scene* s, Light* l);
 int scene_get_pix_rgb_size(Scene* s);
 double scene_get_light_intensity(Scene* s, Vector* intersection, double angle);
 int* scene_create_pix_rgb(Scene* s);
-int scene_get_closest_object_intersection(Scene* s, Ray* ray, Vector* i, double* a, Color* c);
+int scene_get_closest_object_intersection(Scene* s, Ray* ray, Vector* i, double* a, Color* c, Vector* light_trace_point);
+void scene_free(Scene* s);
+void scene_set_resolution(Scene* s, double resolution);
 
 
 #endif

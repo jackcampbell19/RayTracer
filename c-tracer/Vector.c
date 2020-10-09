@@ -97,3 +97,48 @@ double vector_dot(Vector* a, Vector* b) {
 double vector_norm(Vector* v) {
     return sqrt(v->x * v->x + v->y * v->y + v->z * v->z);
 }
+
+
+void vector_rotate_x(Vector* v, double angle, Vector* r) {
+    double a = angle * M_PI / 180;
+    double x = v->x;
+    double y = v->y;
+    double z = v->z;
+    r->x = x;
+    r->y = (y * cos(a)) - (z * sin(a));
+    r->z = (y * sin(a)) + (z * cos(a));
+}
+
+
+void vector_rotate_y(Vector* v, double angle, Vector* r) {
+    double a = angle * M_PI / 180;
+    double x = v->x;
+    double y = v->y;
+    double z = v->z;
+    r->x = x * cos(a) + z * sin(a);
+    r->y = y;
+    r->z = -x * sin(a) + z * cos(a);
+}
+
+
+void vector_rotate_z(Vector* v, double angle, Vector* r) {
+    double a = angle * M_PI / 180;
+    double x = v->x;
+    double y = v->y;
+    double z = v->z;
+    r->x = x * cos(a) - y * sin(a);
+    r->y = x * sin(a) + y * cos(a);
+    r->z = z;
+}
+
+void vector_rotate_x_t(Vector* v, double angle) {
+    vector_rotate_x(v, angle, v);
+}
+
+void vector_rotate_y_t(Vector* v, double angle) {
+    vector_rotate_y(v, angle, v);
+}
+
+void vector_rotate_z_t(Vector* v, double angle) {
+    vector_rotate_z(v, angle, v);
+}

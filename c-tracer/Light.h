@@ -14,6 +14,7 @@ typedef struct {
 
 
 Light* light_create(Vector* origin, double radius, double intensity, Color* color);
+double light_get_distance_intensity(Light* light, Vector* point);
 
 
 #endif

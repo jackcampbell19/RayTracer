@@ -10,10 +10,10 @@ typedef struct {
 } ArrayNode;
 
 
-ArrayNode* array_node_construct(unsigned long v);
+ArrayNode* array_node_create(unsigned long v);
 ArrayNode* array_node_first();
 void array_node_set_next(ArrayNode* a, ArrayNode* n);
-
+int array_node_count(ArrayNode* head);
 
 
 #endif

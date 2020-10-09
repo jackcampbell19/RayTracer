@@ -16,16 +16,18 @@ def save_image(np_array, width, height, filepath):
     out.save(filepath)
 
 
-fn = str(sys.argv[1])
-width = int(sys.argv[2])
-height = int(sys.argv[3])
-res = int(sys.argv[4])
-
-file = open(fn)
-contents = file.readlines()
+width = int(sys.argv[1])
+height = int(sys.argv[2])
+res = int(sys.argv[3])
+frames = int(sys.argv[4])
 width *= res
 height *= res
 
-l = np.array(list(map(lambda x: int(x), contents[0].split(',')[:-1])))
+for f in range(frames):
+    file = open('output/data/frame-' + str(f))
+    contents = file.readlines()
 
-show_image(l, width, height)
+    l = np.array(list(map(lambda x: int(x), contents[0].split(',')[:-1])))
+
+    # show_image(l, width, height)
+    save_image(l, width, height, 'output/images/frame-' + str(f) + ".jpg")

@@ -10,61 +10,78 @@
 #include "Object.h"
 #include <time.h>
 #include "Light.h"
+#include "Render.h"
 
 int main(void) {
 
+  // Set up render
+  Render* render = (Render*) malloc(sizeof(Render));
+  render_construct(render);
+  // Adjust the resolution
+  scene_set_resolution(render->scene, 10);
+  // Adjust camera
+  camera_set_size(render->scene->camera, 100, 100);
+  // Vector camera_origin = {7, 6, 4};
+  // camera_set_origin(render->scene->camera, &camera_origin);
+  // Vector camera_rotation = {25, 0, -30};
+  // camera_set_rotation(render->scene->camera, &camera_rotation);
 
-  Camera* camera = (Camera*) malloc(sizeof(Camera));
-  Vector origin = {0, 12, 0};
-  Vector rotation = {0, 0, 0};
-  camera_construct(camera, &origin, &rotation, 60, 60, 25);
-
-  Scene* scene = (Scene*) malloc(sizeof(Scene));
-  scene_construct(scene, camera, 10);
+  Vector cam_ani_origin = {0, 100, 50};
+  for (double i = 0; i < 24; i++) {
+      Vector arg_ori;
+      vector_rotate_z(&cam_ani_origin, -360.0 / 24.0 * i, &arg_ori);
+      Vector arg_rot = {25, 0, -360.0 / 24.0 * i};
+      // Vector arg_rot = {25, 0, 0};
+      // Vector origin = {0, 24 + 6 - i, 0};
+      camera_animate(render->scene->camera, (int) i, &arg_ori, &arg_rot, 100);
+  }
 
   // Add triangle
   Triangle* t0 = (Triangle*) malloc(sizeof(Triangle));
-  Vector v0 = {0, 0, 0};
-  Vector v1 = {20, -5, 0};
-  Vector v2 = {4, 0, 10};
+  Vector v0 = {-50, -50, 0};
+  Vector v1 = {-50, 50, 0};
+  Vector v2 = {50, -50, 0};
   triangle_construct(t0, &v0, &v1, &v2);
-  Color color = {0, 255, 0};
+  Color color = {255, 255, 255};
   Object* tri = object_create_triangle(t0, &color);
-  scene_add_object(scene, tri);
-  tri->visible = 1;
+  scene_add_object(render->scene, tri);
 
   // Add cube
-  Vector c_origin = {10, 0, -3};
+  Vector c_origin = {0, 0, 0};
   Color c_color = {120, 0, 255};
-  Object* cube = object_create_cube(&c_origin, 15, 12, 10, &c_color);
-  cube->visible = 1;
-  scene_add_object(scene, cube);
+  Object* cube = object_create_cube(&c_origin, 20, 20, 20, &c_color);
+  scene_add_object(render->scene, cube);
+
+  Triangle* t01 = (Triangle*) malloc(sizeof(Triangle));
+  Vector v01 = {50, -50, 0};
+  Vector v11 = {50, 50, 0};
+  Vector v21 = {-50, 50, 0};
+  triangle_construct(t01, &v01, &v11, &v21);
+  Color color1 = {255, 255, 255};
+  Object* tri1 = object_create_triangle(t01, &color1);
+  scene_add_object(render->scene, tri1);
 
 
   // Add light
-  Vector l_origin = {-5, -2, 10};
+  Vector l_origin = {-50, -40, 80};
   Color l_color = {255, 255, 255};
-  Light* light = light_create(&l_origin, 20, 1, &l_color);
-  scene_add_light(scene, light);
+  Light* light = light_create(&l_origin, 350, 0.75, &l_color);
+  scene_add_light(render->scene, light);
 
 
   time_t start = time(NULL);
 
 
-  int* pix_rgb = scene_create_pix_rgb(scene);
-  scene_render_perspective(scene, pix_rgb);
+  render_frames(render, 0, 23);
 
-  char* filepath = "myfile.txt";
-  image_write_pix_rgb_to_file(pix_rgb, scene_get_pix_rgb_size(scene), filepath);
 
   time_t end = time(NULL);
 
   printf("%ld\n", end - start);
 
-  free(camera);
-  free(scene);
-  free(t0);
-  free(pix_rgb);
+  // Free memeory
+  scene_free(render->scene);
+  free(render);
 
 
 

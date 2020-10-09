@@ -26,4 +26,11 @@ void vector_cross(Vector* a, Vector* b, Vector* r);
 double vector_dot(Vector* a, Vector* b);
 double vector_norm(Vector* v);
 
+void vector_rotate_x(Vector* v, double angle, Vector* r);
+void vector_rotate_y(Vector* v, double angle, Vector* r);
+void vector_rotate_z(Vector* v, double angle, Vector* r);
+void vector_rotate_x_t(Vector* v, double angle);
+void vector_rotate_y_t(Vector* v, double angle);
+void vector_rotate_z_t(Vector* v, double angle);
+
 #endif
